@@ -7,4 +7,10 @@
     <string name="My_music_world">My Music World</string>
     <string name="song_name">Song Name</string>
     <string name="back_btn">Back</string>
+    <string name="start_tv">00:00</string>
+    <string name="end_tv">loading..</string>
+    <string name="repeat_btn">Repeat</string>
+    <string name="equalizer_btn">Equalizer</string>
+    <string name="timer_btn">Timer</string>
+    <string name="share_btn">Share</string>
 </resources>

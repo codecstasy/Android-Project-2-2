@@ -1,11 +1,16 @@
 package com.example.mymusicplayer
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import com.example.mymusicplayer.databinding.ActivityPlayerBinding
 
 class PlayerActivity : AppCompatActivity() {
+
+      private lateinit var binding: ActivityPlayerBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_player)
+        setTheme(androidx.constraintlayout.widget.R.style.Theme_AppCompat_DayNight)
+        binding = ActivityPlayerBinding.inflate(layoutInflater)
+        setContentView(binding.root)
     }
 }

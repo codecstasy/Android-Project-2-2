@@ -47,6 +47,7 @@
 
     <!-- Current song image -->
     <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/songimgPA"
         android:layout_width="250dp"
         android:layout_height="250dp"
         android:layout_margin="10dp"
@@ -57,6 +58,7 @@
 
     <!-- Current song name -->
     <TextView
+        android:id="@+id/songNamePA"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
@@ -77,13 +79,18 @@
         android:layout_margin="10dp"
         android:gravity="center"
         android:layout_weight="1">
+
+        <!-- previous Button -->
         <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/previousBtnPA"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:icon="@drawable/previous_icon"
             app:iconSize="40dp"/>
 
+       <!-- play & pause Button -->
         <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/playPauseBtnPA"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:icon="@drawable/pause_icon"
@@ -92,7 +99,10 @@
             app:shapeAppearanceOverlay="@style/curved"
             android:backgroundTint="@android:color/holo_red_light"
             app:iconTint="@color/white"/>
+
+       <!-- Next Button -->
         <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/nextBtnPA"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:icon="@drawable/next_icon"

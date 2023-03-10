@@ -27,8 +27,18 @@ class MainActivity : AppCompatActivity() {
     }
 
 
+    @SuppressLint("SuspiciousIndentation")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setTheme(R.style.Theme_MyMusicPlayer)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        //for nav drawer
+        toggle = ActionBarDrawerToggle(this,binding.root,R.string.open,R.string.close)
+        binding.root.addDrawerListener(toggle)
+        toggle.syncState()
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        if(requestRuntimePermission())
         initializeLayout()
 
 
@@ -36,6 +46,8 @@ class MainActivity : AppCompatActivity() {
         binding.shuffleBtn.setOnClickListener {
             Toast.makeText(this@MainActivity, "Button Clicked", Toast.LENGTH_SHORT).show()
             val intent = Intent(this@MainActivity,PlayerActivity::class.java)
+            intent.putExtra("index", 0)
+            intent.putExtra("class","MainActivity")
             startActivity(intent)
         }
         binding.favouriteBtn.setOnClickListener {
@@ -66,20 +78,26 @@ class MainActivity : AppCompatActivity() {
     }
 
     //For requesting permission
-    private fun requestRuntimePermission (){
+    private fun requestRuntimePermission ():Boolean{
 
         if(ActivityCompat.checkSelfPermission(this,android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
             !=PackageManager.PERMISSION_GRANTED)
         {
             ActivityCompat.requestPermissions(this , arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE),13)
+            return false
         }
+        return true
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if(requestCode == 13){
-            if(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+            if(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED){
                 Toast.makeText(this, "Permission Granted",Toast.LENGTH_SHORT).show()
+                MusicListMA = getAllAudio()
+
+            }
+
 
             else
                 ActivityCompat.requestPermissions(this , arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE),13)
@@ -96,15 +114,7 @@ class MainActivity : AppCompatActivity() {
 
     @SuppressLint("SetTextI18n")
     private fun initializeLayout(){
-        requestRuntimePermission()
-        setTheme(R.style.Theme_MyMusicPlayer)
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-        //for nav drawer
-        toggle = ActionBarDrawerToggle(this,binding.root,R.string.open,R.string.close)
-        binding.root.addDrawerListener(toggle)
-        toggle.syncState()
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
         val musicList = ArrayList<String>()
         MusicListMA = getAllAudio()
         binding.musicRV.setHasFixedSize(true)

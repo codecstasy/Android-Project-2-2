@@ -1,19 +1,25 @@
 package com.example.mymusicplayer
 
+import android.content.ComponentName
+import android.content.Intent
+import android.content.ServiceConnection
 import android.media.MediaPlayer
 import android.os.Bundle
+import android.os.IBinder
+import android.widget.SeekBar
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.mymusicplayer.databinding.ActivityPlayerBinding
 
-class PlayerActivity : AppCompatActivity() {
+class PlayerActivity : AppCompatActivity(), ServiceConnection {
 
       companion object {
          lateinit var musicListPA : ArrayList<Music>
          var songPosition: Int = 0
-          var mediaPlayer:MediaPlayer? = null
+
           var isPlaying:Boolean = false
+          var musicService: MusicService? = null
       }
 
 
@@ -23,6 +29,11 @@ class PlayerActivity : AppCompatActivity() {
         setTheme(androidx.constraintlayout.widget.R.style.Theme_AppCompat_DayNight)
         binding = ActivityPlayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        // for starting service
+        val intent = Intent(this,MusicService::class.java)
+        bindService(intent, this, BIND_AUTO_CREATE)
+        startService(intent)
         initializeLayout()
         binding.playPauseBtnPA.setOnClickListener{
 
@@ -36,6 +47,15 @@ class PlayerActivity : AppCompatActivity() {
         binding.nextBtnPA.setOnClickListener{
             prevNextSong(increment = true)
         }
+        binding.seekbarPA.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener{
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+
+            }
+
+            override fun onStartTrackingTouch(p0: SeekBar?)= Unit
+            override fun onStopTrackingTouch(p0: SeekBar?)=Unit
+
+        })
 
 
     }
@@ -48,11 +68,11 @@ class PlayerActivity : AppCompatActivity() {
     }
     private fun createMediaPlayer(){
          try {
-             if(mediaPlayer == null ) mediaPlayer = MediaPlayer()
-             mediaPlayer!!.reset()
-             mediaPlayer!!.setDataSource(musicListPA[songPosition].path)
-             mediaPlayer!!.prepare()
-             mediaPlayer!!.start()
+             if(musicService!!.mediaPlayer == null ) musicService!!.mediaPlayer = MediaPlayer()
+             musicService!!.mediaPlayer!!.reset()
+            musicService!!.mediaPlayer!!.setDataSource(musicListPA[songPosition].path)
+            musicService!!.mediaPlayer!!.prepare()
+            musicService!!.mediaPlayer!!.start()
              isPlaying = true
              binding.playPauseBtnPA.setIconResource(R.drawable.pause_icon)
          }
@@ -68,7 +88,15 @@ class PlayerActivity : AppCompatActivity() {
                 musicListPA = ArrayList()
                 musicListPA.addAll(MainActivity.MusicListMA)
                 setLayout()
-                createMediaPlayer()
+
+
+            }
+            "MainActivity" ->{
+                musicListPA = ArrayList()
+                musicListPA.addAll(MainActivity.MusicListMA)
+                musicListPA.shuffle()
+                setLayout()
+
 
             }
         }
@@ -76,12 +104,12 @@ class PlayerActivity : AppCompatActivity() {
     private fun playMusic(){
         binding.playPauseBtnPA.setIconResource(R.drawable.pause_icon)
         isPlaying = true
-        mediaPlayer!!.start()
+       musicService!!.mediaPlayer!!.start()
     }
     private fun pauseMusic(){
         binding.playPauseBtnPA.setIconResource(R.drawable.play_icon)
         isPlaying = false
-        mediaPlayer!!.pause()
+       musicService!!.mediaPlayer!!.pause()
     }
     private fun prevNextSong(increment: Boolean){
         if(increment)
@@ -116,5 +144,16 @@ class PlayerActivity : AppCompatActivity() {
             else --songPosition
 
         }
+    }
+
+    override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+        val binder = service as MusicService.MyBinder
+        musicService = binder.currentService()
+        createMediaPlayer()
+
+    }
+
+    override fun onServiceDisconnected(p0: ComponentName?) {
+        musicService = null
     }
 }

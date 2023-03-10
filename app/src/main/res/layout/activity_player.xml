@@ -119,6 +119,7 @@
         android:layout_weight="1">
         
         <TextView
+            android:id="@+id/tvSeekbarStart"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:textColor="@color/cool_blue"
@@ -126,12 +127,14 @@
             android:text="@string/start_tv"/>
   
       <androidx.appcompat.widget.AppCompatSeekBar
+          android:id="@+id/seekbarPA"
           android:layout_width="0dp"
           android:layout_height="match_parent"
           android:layout_weight="1"
           tools:ignore="NestedWeights" />
 
         <TextView
+            android:id="@+id/tvSeekbarEnd"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:textColor="@color/cool_blue"

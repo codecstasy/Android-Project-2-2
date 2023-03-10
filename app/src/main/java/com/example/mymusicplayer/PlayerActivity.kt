@@ -1,5 +1,6 @@
 package com.example.mymusicplayer
 
+import android.annotation.SuppressLint
 import android.content.ComponentName
 import android.content.Intent
 import android.content.ServiceConnection
@@ -14,16 +15,19 @@ import com.example.mymusicplayer.databinding.ActivityPlayerBinding
 
 class PlayerActivity : AppCompatActivity(), ServiceConnection {
 
+      @SuppressLint("StaticFieldLeak")
       companion object {
          lateinit var musicListPA : ArrayList<Music>
          var songPosition: Int = 0
 
           var isPlaying:Boolean = false
           var musicService: MusicService? = null
+           lateinit var binding: ActivityPlayerBinding
+
       }
 
 
-      private lateinit var binding: ActivityPlayerBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setTheme(androidx.constraintlayout.widget.R.style.Theme_AppCompat_DayNight)
@@ -49,6 +53,7 @@ class PlayerActivity : AppCompatActivity(), ServiceConnection {
         }
         binding.seekbarPA.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener{
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                if(fromUser) musicService!!.mediaPlayer!!.seekTo(progress)
 
             }
 
@@ -75,6 +80,10 @@ class PlayerActivity : AppCompatActivity(), ServiceConnection {
             musicService!!.mediaPlayer!!.start()
              isPlaying = true
              binding.playPauseBtnPA.setIconResource(R.drawable.pause_icon)
+             binding.tvSeekbarStart.text = formatDuration(musicService!!.mediaPlayer!!.currentPosition.toLong())
+             binding.tvSeekbarEnd.text = formatDuration(musicService!!.mediaPlayer!!.duration.toLong())
+             binding.seekbarPA.progress = 0
+             binding.seekbarPA.max = musicService!!.mediaPlayer!!.duration
          }
          catch (e:Exception){return}
 
@@ -150,6 +159,7 @@ class PlayerActivity : AppCompatActivity(), ServiceConnection {
         val binder = service as MusicService.MyBinder
         musicService = binder.currentService()
         createMediaPlayer()
+        musicService!!.seekBarSetup()
 
     }
 

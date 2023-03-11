@@ -12,5 +12,7 @@ class Playlist_Activity : AppCompatActivity() {
         setTheme(androidx.constraintlayout.widget.R.style.Theme_AppCompat_DayNight)
         binding= ActivityPlaylistBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        binding.backBtnPLA.setOnClickListener { finish() }
+
     }
 }

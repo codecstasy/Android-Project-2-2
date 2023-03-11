@@ -22,4 +22,7 @@
     <string name="about">About</string>
     <string name="exit">Exit</string>
     <string name="song_album">Song Album</string>
+    <string name="min_15">15 Miutes </string>
+    <string name="min_30">30 Miutes </string>
+    <string name="min_60">60 Miutes </string>
 </resources>

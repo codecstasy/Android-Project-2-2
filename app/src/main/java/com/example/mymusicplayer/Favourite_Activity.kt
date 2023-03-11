@@ -13,5 +13,6 @@ class Favourite_Activity : AppCompatActivity() {
         setTheme(androidx.appcompat.R.style.Theme_AppCompat_DayNight)
         binding= ActivityFavouriteBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        binding.backBtnFA.setOnClickListener { finish() }
     }
 }

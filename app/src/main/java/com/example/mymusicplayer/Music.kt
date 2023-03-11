@@ -2,6 +2,7 @@ package com.example.mymusicplayer
 
 import android.annotation.SuppressLint
 import java.util.concurrent.TimeUnit
+import kotlin.system.exitProcess
 
 data class Music (val id:String, val title:String, val album:String,val artist:String,val duration: Long = 0,val path:String,
   val artUri:String)
@@ -16,3 +17,29 @@ data class Music (val id:String, val title:String, val album:String,val artist:S
 
          return String.format("%02d:%02d",minutes,seconds)
   }
+
+  fun setSongPosition(increment: Boolean){
+      if(!PlayerActivity.repeat) {
+
+          if(increment){
+              if(PlayerActivity.musicListPA.size - 1 == PlayerActivity.songPosition)
+                  PlayerActivity.songPosition = 0
+              else ++PlayerActivity.songPosition
+            }else{
+
+                if(0 == PlayerActivity.songPosition)
+                    PlayerActivity.songPosition = PlayerActivity.musicListPA.size -1
+              else --PlayerActivity.songPosition
+
+          }
+      }
+
+
+
+  }
+fun exitApplication(){
+    if(PlayerActivity.musicService != null){
+        PlayerActivity.musicService!!.mediaPlayer!!.release()
+        PlayerActivity.musicService = null }
+    exitProcess(1)
+}

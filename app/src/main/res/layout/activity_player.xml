@@ -37,11 +37,12 @@
             android:layout_weight="1"
             tools:ignore="NestedWeights" />
         <ImageButton
+            android:id="@+id/favouriteBtnPA"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/favourite_empty_icon"
             android:background="@android:color/transparent"
-            android:layout_marginEnd="5dp"
+            android:layout_marginEnd="15dp"
             app:tint="@android:color/holo_red_dark"
             android:contentDescription="@string/favourites_btn" />
 

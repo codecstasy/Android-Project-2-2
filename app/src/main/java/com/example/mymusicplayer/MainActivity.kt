@@ -16,6 +16,8 @@ import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.mymusicplayer.databinding.ActivityMainBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.gson.GsonBuilder
+import com.google.gson.reflect.TypeToken
 import java.io.File
 import kotlin.system.exitProcess
 
@@ -41,8 +43,18 @@ class MainActivity : AppCompatActivity() {
         binding.root.addDrawerListener(toggle)
         toggle.syncState()
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        if(requestRuntimePermission())
-        initializeLayout()
+        if(requestRuntimePermission()) {
+            initializeLayout()
+            // for retrieving favourites data using shared preferences
+            Favourite_Activity.favouriteSongs = ArrayList()
+            val editor = getSharedPreferences("FAVOURITES", MODE_PRIVATE)
+            val jsonString =  editor.getString("FavouriteSongs",null)
+            val typeToken = object : TypeToken<ArrayList<Music>>(){}.type
+            if(jsonString!= null){
+                val data : ArrayList<Music> = GsonBuilder().create().fromJson(jsonString,typeToken)
+                Favourite_Activity.favouriteSongs.addAll(data)
+            }
+        }
 
 
 
@@ -187,6 +199,15 @@ class MainActivity : AppCompatActivity() {
         if(!PlayerActivity.isPlaying && PlayerActivity.musicService != null){
            exitApplication()
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // for sharing favourites data using shared preferences
+        val editor = getSharedPreferences("FAVOURITES", MODE_PRIVATE).edit()
+        val jsonString = GsonBuilder().create().toJson(Favourite_Activity.favouriteSongs)
+        editor.putString("FavouriteSongs",jsonString)
+        editor.apply()
     }
 
 }

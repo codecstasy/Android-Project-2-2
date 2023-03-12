@@ -37,6 +37,8 @@ class PlayerActivity : AppCompatActivity(), ServiceConnection,MediaPlayer.OnComp
            var min15: Boolean = false
            var min30: Boolean = false
            var min60: Boolean = false
+           var isFavourite: Boolean = false
+           var findex : Int = -1
 
       }
 
@@ -118,9 +120,22 @@ class PlayerActivity : AppCompatActivity(), ServiceConnection,MediaPlayer.OnComp
              }
         }
 
+        binding.favouriteBtnPA.setOnClickListener {
+            if(isFavourite){
+                isFavourite = false
+                binding.favouriteBtnPA.setImageResource(R.drawable.favourite_empty_icon)
+                Favourite_Activity.favouriteSongs.removeAt(findex)
+            }
+            else {
+                isFavourite = true
+                binding.favouriteBtnPA.setImageResource(R.drawable.favourite_icon)
+                Favourite_Activity.favouriteSongs.add(musicListPA[songPosition])
+            }
+        }
 
     }
     private fun setLayout (){
+        findex = favouriteChecker(musicListPA[songPosition].id)
         Glide.with(this)
             .load(musicListPA[songPosition].artUri)
             .apply(RequestOptions().placeholder(R.drawable.ic_launcher_slash_screen).centerCrop())
@@ -128,6 +143,8 @@ class PlayerActivity : AppCompatActivity(), ServiceConnection,MediaPlayer.OnComp
          binding.songNamePA.text = musicListPA[songPosition].title
         if(repeat) binding.repeatBtnPA.setColorFilter(ContextCompat.getColor(this,R.color.purple_500))
         if(min15|| min30|| min60) binding.timerBtnPA.setColorFilter(ContextCompat.getColor(this, R.color.purple_500))
+        if(isFavourite) binding.favouriteBtnPA.setImageResource(R.drawable.favourite_icon)
+        else binding.favouriteBtnPA.setImageResource(R.drawable.favourite_empty_icon)
 
     }
     private fun createMediaPlayer(){
@@ -151,6 +168,14 @@ class PlayerActivity : AppCompatActivity(), ServiceConnection,MediaPlayer.OnComp
     private fun initializeLayout(){
         songPosition = intent.getIntExtra("index", 0)
         when(intent.getStringExtra("class")){
+            "FavouriteAdapter"->{
+                val intent = Intent(this,MusicService::class.java)
+                bindService(intent,this, BIND_AUTO_CREATE)
+                startService(intent)
+                musicListPA = ArrayList()
+                musicListPA.addAll(Favourite_Activity.favouriteSongs)
+                setLayout()
+            }
 
             "MusicAdapter" ->{
 
@@ -166,6 +191,14 @@ class PlayerActivity : AppCompatActivity(), ServiceConnection,MediaPlayer.OnComp
                 musicListPA.shuffle()
                 setLayout()
 
+
+            }
+            "FavouriteShuffle"->{
+
+                musicListPA = ArrayList()
+                musicListPA.addAll(Favourite_Activity.favouriteSongs)
+                musicListPA.shuffle()
+                setLayout()
 
             }
         }

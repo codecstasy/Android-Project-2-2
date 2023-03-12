@@ -25,4 +25,7 @@
     <string name="min_15">15 Miutes </string>
     <string name="min_30">30 Miutes </string>
     <string name="min_60">60 Miutes </string>
+    <string name="song_img">Song Image</string>
+    <string name="playlist_name">Playlist Name</string>
+    <string name="playlist_delete">Delete</string>
 </resources>

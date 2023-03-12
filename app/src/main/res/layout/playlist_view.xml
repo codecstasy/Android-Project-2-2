@@ -5,7 +5,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardCornerRadius="15dp"
     app:strokeWidth="2dp"
-    app:strokeColor="@color/cool_pink">
+    app:strokeColor="@color/cool_pink"
+    android:layout_margin="10dp">
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/playlistimg"
@@ -24,9 +25,12 @@
         android:textColor="@color/black"
         android:textSize="18sp"
         android:gravity="center"
-        android:layout_marginTop="130dp"/>
+        android:layout_marginTop="130dp"
+        android:ellipsize="marquee"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:singleLine="true"/>
     <ImageButton
-
+        android:id="@+id/playlistDeleteBtn"
         android:layout_width="35dp"
         android:layout_height="35dp"
         android:src="@drawable/delete_icon"

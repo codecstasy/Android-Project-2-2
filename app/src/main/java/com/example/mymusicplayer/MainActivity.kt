@@ -144,7 +144,6 @@ class MainActivity : AppCompatActivity() {
 
     @SuppressLint("SetTextI18n")
     private fun initializeLayout(){
-
         val musicList = ArrayList<String>()
         MusicListMA = getAllAudio()
         binding.musicRV.setHasFixedSize(true)

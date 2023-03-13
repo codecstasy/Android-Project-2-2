@@ -28,4 +28,5 @@
     <string name="song_img">Song Image</string>
     <string name="playlist_name">Playlist Name</string>
     <string name="playlist_delete">Delete</string>
+    <string name="User_name">Your Name</string>
 </resources>

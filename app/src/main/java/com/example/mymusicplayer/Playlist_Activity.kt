@@ -1,15 +1,23 @@
 package com.example.mymusicplayer
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.mymusicplayer.databinding.ActivityPlaylistBinding
+import com.example.mymusicplayer.databinding.AddPlaylistDialogBinding
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class Playlist_Activity : AppCompatActivity() {
 
     private lateinit var binding: ActivityPlaylistBinding
     private lateinit var adapter: PlaylistViewAdapter
+
+    companion object{
+        var musicPlaylist: MusicPlaylist = MusicPlaylist()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setTheme(androidx.constraintlayout.widget.R.style.Theme_AppCompat_DayNight)
@@ -27,6 +35,22 @@ class Playlist_Activity : AppCompatActivity() {
         adapter = PlaylistViewAdapter(this,tempList)
         binding.playlistRV.adapter = adapter
         binding.backBtnPLA.setOnClickListener { finish() }
+        binding.addplaylistBtn.setOnClickListener{
+            customAlertDialog()
+        }
+
+    }
+    private fun customAlertDialog(){
+        val customDialog = LayoutInflater.from(this@Playlist_Activity,).inflate(R.layout.add_playlist_dialog,binding.root,false)
+        val builder = MaterialAlertDialogBuilder(this)
+        val binder = AddPlaylistDialogBinding.bind(customDialog)
+        builder.setView(customDialog)
+            .setTitle("Playlist Details")
+            .setPositiveButton("ADD"){dialog,_ ->
+                dialog.dismiss()
+
+            }.show()
+
 
     }
 }
